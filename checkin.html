@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FaithGuard - Temple Check-In">
+    <title>FaithGuard - Temple Check-In</title>
+    <style>
+        /* ============================================
+           RESET & BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: #FFF7ED;
+            color: #1E293B;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ============================================
+           MAIN CONTAINER (One Central Column)
+           ============================================ */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ============================================
+           TOP HEADER (Centered)
+           ============================================ */
+        .page-header {
+            text-align: center;
+            width: 100%;
+            padding: 1.5rem 0 1rem;
+        }
+
+        .app-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1E293B;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: #475569;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .instruction-text {
+            font-size: 1.0625rem;
+            color: #475569;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* ============================================
+           OPTION SECTION (Stacked, Not Side-by-Side)
+           ============================================ */
+        .options-section {
+            width: 100%;
+            margin: 2.5rem 0;
+        }
+
+        /* Hidden radio buttons for selection state */
+        .option-radio {
+            display: none;
+        }
+
+        /* Option Card (Full-width, Centered Content) */
+        .option-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.06),
+                        0 4px 16px -4px rgba(0, 0, 0, 0.04);
+            border: 2px solid #E5E7EB;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Selected state styling */
+        .option-radio:checked + .option-card {
+            border-color: #F59E0B;
+            box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.15),
+                        0 8px 24px -4px rgba(245, 158, 11, 0.1);
+        }
+
+        /* Option Icon (Centered) */
+        .option-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #F59E0B;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .option-radio:checked + .option-card .option-icon svg {
+            stroke: #F59E0B;
+            stroke-width: 2;
+        }
+
+        /* Option Title (Centered) */
+        .option-title {
+            font-size: 1.375rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            width: 100%;
+        }
+
+        /* Option Description (Centered) */
+        .option-description {
+            font-size: 1rem;
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        /* ============================================
+           QR CODE OPTION SPECIFIC
+           ============================================ */
+        .qr-action-button {
+            width: 100%;
+            max-width: 280px;
+            background: linear-gradient(90deg, #FDBA74, #F59E0B);
+            color: #FFFFFF;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 2px 8px -1px rgba(245, 158, 11, 0.2);
+            letter-spacing: 0.01em;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .qr-action-button:active {
+            transform: scale(0.98);
+        }
+
+        /* Camera Preview Placeholder (Inside QR Card) */
+        .camera-preview {
+            display: none;
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 2rem 1.5rem;
+            background: #1E293B;
+            border-radius: 16px;
+            text-align: center;
+        }
+
+        .option-radio:checked + .option-card .camera-preview {
+            display: block;
+        }
+
+        .camera-icon-large {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            opacity: 0.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-icon-large svg {
+            width: 100%;
+            height: 100%;
+            stroke: #FFFFFF;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .camera-preview-text {
+            color: #FFFFFF;
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .camera-note {
+            color: #94A3B8;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* ============================================
+           TEMPLE CODE OPTION SPECIFIC
+           ============================================ */
+        .code-input {
+            width: 100%;
+            max-width: 280px;
+            padding: 1rem 1.25rem;
+            font-size: 1.0625rem;
+            font-family: inherit;
+            color: #1E293B;
+            background: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            margin-bottom: 1.25rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            -webkit-appearance: none;
+            appearance: none;
+            text-align: center;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #F59E0B;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        }
+
+        .code-input::placeholder {
+            color: #94A3B8;
+        }
+
+        .code-action-button {
+            width: 100%;
+            max-width: 280px;
+            background: #F8FAFC;
+            color: #475569;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border: 2px solid #E2E8F0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            letter-spacing: 0.01em;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .code-action-button:active {
+            background: #F1F5F9;
+        }
+
+        /* ============================================
+           DIVIDER (OR with Lines)
+           ============================================ */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 1rem 0 1.5rem;
+            gap: 1rem;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #E5E7EB;
+        }
+
+        .divider-text {
+            font-size: 0.875rem;
+            color: #94A3B8;
+            font-weight: 500;
+            padding: 0 0.5rem;
+        }
+
+        /* ============================================
+           FINAL CTA SECTION (Clearly Separated)
+           ============================================ */
+        .continue-section {
+            width: 100%;
+            margin: 2.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .continue-button {
+            width: 100%;
+            max-width: 400px;
+            background: #E2E8F0;
+            color: #94A3B8;
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 999px;
+            cursor: not-allowed;
+            letter-spacing: 0.01em;
+            -webkit-tap-highlight-color: transparent;
+            opacity: 0.6;
+        }
+
+        /* ============================================
+           FOOTER TRUST TEXT (Center Aligned)
+           ============================================ */
+        .trust-note {
+            width: 100%;
+            text-align: center;
+            padding: 2rem 0 1rem;
+        }
+
+        .trust-text {
+            font-size: 0.875rem;
+            color: #94A3B8;
+            letter-spacing: 0.02em;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (min-width: 480px) {
+            .container {
+                padding: 3rem 2rem;
+            }
+
+            .page-header {
+                padding: 2rem 0 1.5rem;
+            }
+
+            .app-name {
+                font-size: 2.25rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.0625rem;
+            }
+
+            .instruction-text {
+                font-size: 1.125rem;
+            }
+
+            .options-section {
+                margin: 3rem 0;
+            }
+
+            .option-card {
+                padding: 3rem 2.5rem;
+                border-radius: 24px;
+            }
+
+            .option-icon {
+                width: 72px;
+                height: 72px;
+                margin-bottom: 1.75rem;
+            }
+
+            .option-title {
+                font-size: 1.5rem;
+            }
+
+            .option-description {
+                font-size: 1.0625rem;
+            }
+
+            .qr-action-button,
+            .code-action-button {
+                font-size: 1.0625rem;
+                padding: 1.125rem 2.5rem;
+                max-width: 320px;
+            }
+
+            .code-input {
+                font-size: 1.125rem;
+                padding: 1.125rem 1.5rem;
+                max-width: 320px;
+            }
+
+            .continue-button {
+                font-size: 1.1875rem;
+                padding: 1.375rem 3rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 4rem 2.5rem;
+            }
+
+            .page-header {
+                padding: 2.5rem 0 2rem;
+            }
+
+            .app-name {
+                font-size: 2.5rem;
+            }
+
+            .instruction-text {
+                font-size: 1.25rem;
+            }
+
+            .options-section {
+                margin: 3.5rem 0;
+            }
+
+            .option-card {
+                padding: 3.5rem 3rem;
+                border-radius: 28px;
+            }
+
+            .option-icon {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 2rem;
+            }
+
+            .option-title {
+                font-size: 1.625rem;
+            }
+
+            .option-description {
+                font-size: 1.125rem;
+            }
+
+            .continue-button {
+                max-width: 500px;
+            }
+        }
+
+        /* ============================================
+           ACCESSIBILITY & SAFE AREAS
+           ============================================ */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-top: max(2rem, env(safe-area-inset-top));
+                padding-bottom: max(1rem, env(safe-area-inset-bottom));
+                padding-left: max(1.5rem, env(safe-area-inset-left));
+                padding-right: max(1.5rem, env(safe-area-inset-right));
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .option-card {
+                border: 2px solid #1E293B;
+            }
+
+            .option-radio:checked + .option-card {
+                border-color: #F59E0B;
+                border-width: 3px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Top Header (Centered) -->
+        <header class="page-header">
+            <h1 class="app-name">FaithGuard</h1>
+            <p class="page-subtitle">Temple Check-In</p>
+            <p class="instruction-text">
+                Choose one way to enter the temple system.
+            </p>
+        </header>
+
+        <!-- Option Section (Stacked) -->
+        <section class="options-section">
+            <!-- Option Card 1: Scan QR Code -->
+            <input type="radio" name="checkin-method" id="qr-option" class="option-radio">
+            <label for="qr-option" class="option-card">
+                <div class="option-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="3" width="5" height="5"/>
+                        <rect x="16" y="3" width="5" height="5"/>
+                        <rect x="3" y="16" width="5" height="5"/>
+                        <path d="M11 3h2v2h-2zM11 19h2v2h-2zM3 11h2v2H3zM19 11h2v2h-2z"/>
+                        <rect x="11" y="11" width="2" height="2"/>
+                    </svg>
+                </div>
+                <h2 class="option-title">Scan QR Code</h2>
+                <p class="option-description">
+                    Scan the QR displayed at the temple entrance.
+                </p>
+                <button type="button" class="qr-action-button">
+                    Open Camera
+                </button>
+                
+                <!-- Camera Preview Placeholder (Inside Card) -->
+                <div class="camera-preview">
+                    <div class="camera-icon-large">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                            <path d="M16 3h-8L6 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2L16 3z"/>
+                            <circle cx="12" cy="14" r="3"/>
+                        </svg>
+                    </div>
+                    <p class="camera-preview-text">
+                        Camera will open here to scan QR code
+                    </p>
+                    <p class="camera-note">
+                        Camera access will be requested.
+                    </p>
+                </div>
+            </label>
+
+            <!-- Divider -->
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">OR</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <!-- Option Card 2: Enter Temple Code -->
+            <input type="radio" name="checkin-method" id="code-option" class="option-radio">
+            <label for="code-option" class="option-card">
+                <div class="option-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <h2 class="option-title">Enter Temple Code</h2>
+                <p class="option-description">
+                    Manually enter the unique temple code.
+                </p>
+                <input 
+                    type="text" 
+                    class="code-input" 
+                    placeholder="Enter temple code"
+                    autocomplete="off"
+                >
+                <button type="button" class="code-action-button">
+                    Continue
+                </button>
+            </label>
+        </section>
+
+        <!-- Final CTA Section (Clearly Separated) -->
+        <section class="continue-section">
+            <button type="button" class="continue-button" disabled>
+                Enter Temple
+            </button>
+        </section>
+
+        <!-- Footer Trust Text (Center Aligned) -->
+        <footer class="trust-note">
+            <p class="trust-text">
+                No login • No tracking • Temporary access only
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

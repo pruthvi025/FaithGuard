@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="FaithGuard - Community-Driven Lost & Found System for Temples">
+    <title>FaithGuard - Temple Lost & Found</title>
+    <style>
+        /* ============================================
+           RESET & BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background-color: #FFF7ED;
+            color: #1E293B;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* ============================================
+           MAIN CONTAINER
+           ============================================ */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* ============================================
+           HERO SECTION (Centered, Clean)
+           ============================================ */
+        .hero-section {
+            text-align: center;
+            padding: 2rem 0 3rem;
+        }
+
+        /* Minimal temple icon */
+        .temple-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .temple-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: #F59E0B;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1E293B;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: #475569;
+            line-height: 1.7;
+            max-width: 90%;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* ============================================
+           PRIMARY CTA BUTTON
+           ============================================ */
+        .cta-button {
+            width: 100%;
+            background: linear-gradient(90deg, #FDBA74, #F59E0B);
+            color: #FFFFFF;
+            font-size: 1.125rem;
+            font-weight: 600;
+            padding: 1.25rem 2.5rem;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 
+                0 4px 12px -2px rgba(245, 158, 11, 0.25),
+                0 2px 6px -1px rgba(245, 158, 11, 0.15);
+            margin: 3rem 0;
+            letter-spacing: 0.01em;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .cta-button:active {
+            transform: scale(0.98);
+            box-shadow: 
+                0 2px 8px -1px rgba(245, 158, 11, 0.25),
+                0 1px 4px -1px rgba(245, 158, 11, 0.15);
+        }
+
+        /* ============================================
+           FEATURE CARDS (Stacked, Minimal)
+           ============================================ */
+        .features-section {
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.06),
+                        0 4px 16px -4px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .feature-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.25rem;
+            opacity: 0.85;
+        }
+
+        .feature-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: #F59E0B;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .feature-description {
+            font-size: 1rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-top: 2rem;
+        }
+
+        .footer-text {
+            font-size: 0.9375rem;
+            color: #94A3B8;
+            letter-spacing: 0.05em;
+            line-height: 1.6;
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (min-width: 480px) {
+            .container {
+                padding: 4rem 2rem;
+            }
+
+            .hero-section {
+                padding: 3rem 0 4rem;
+            }
+
+            .temple-icon {
+                width: 100px;
+                height: 100px;
+                margin-bottom: 2.5rem;
+            }
+
+            .app-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.25rem;
+            }
+
+            .cta-button {
+                font-size: 1.1875rem;
+                padding: 1.375rem 3rem;
+            }
+
+            .feature-card {
+                padding: 2.5rem;
+                border-radius: 24px;
+            }
+
+            .feature-title {
+                font-size: 1.375rem;
+            }
+
+            .feature-description {
+                font-size: 1.0625rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 5rem 2.5rem;
+            }
+
+            .hero-section {
+                padding: 4rem 0 5rem;
+            }
+
+            .temple-icon {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 3rem;
+            }
+
+            .app-title {
+                font-size: 3.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.375rem;
+                max-width: 85%;
+            }
+
+            .cta-button {
+                font-size: 1.25rem;
+                padding: 1.5rem 3.5rem;
+                max-width: 500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .features-section {
+                margin: 4rem 0;
+            }
+
+            .feature-card {
+                padding: 3rem;
+                border-radius: 28px;
+            }
+
+            .feature-title {
+                font-size: 1.5rem;
+            }
+
+            .feature-description {
+                font-size: 1.125rem;
+            }
+        }
+
+        /* ============================================
+           ACCESSIBILITY & SAFE AREAS
+           ============================================ */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-top: max(3rem, env(safe-area-inset-top));
+                padding-bottom: max(2rem, env(safe-area-inset-bottom));
+                padding-left: max(1.5rem, env(safe-area-inset-left));
+                padding-right: max(1.5rem, env(safe-area-inset-right));
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .feature-card {
+                border: 2px solid #1E293B;
+            }
+
+            .cta-button {
+                border: 2px solid #FFFFFF;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            .cta-button {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <!-- Minimal temple icon -->
+            <div class="temple-icon">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Temple base -->
+                    <rect x="25" y="70" width="50" height="10" fill="currentColor" opacity="0.8"/>
+                    <!-- Main structure -->
+                    <rect x="30" y="50" width="40" height="20" fill="currentColor" opacity="0.85"/>
+                    <!-- Central tower (shikara) -->
+                    <polygon points="50,20 40,45 60,45" fill="currentColor" opacity="0.9"/>
+                    <rect x="47.5" y="45" width="5" height="5" fill="currentColor" opacity="0.9"/>
+                    <!-- Side towers -->
+                    <polygon points="35,40 28,55 42,55" fill="currentColor" opacity="0.75"/>
+                    <polygon points="65,40 58,55 72,55" fill="currentColor" opacity="0.75"/>
+                    <!-- Entrance arch -->
+                    <path d="M 40 70 Q 50 60 60 70" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6"/>
+                    <!-- Decorative element -->
+                    <circle cx="50" cy="25" r="2" fill="currentColor" opacity="0.7"/>
+                </svg>
+            </div>
+
+            <!-- App Title -->
+            <h1 class="app-title">Temple Lost & Found</h1>
+
+            <!-- Subtitle -->
+            <p class="hero-subtitle">
+                A peaceful space to reconnect with what you've lost<br>
+                on the temple grounds.
+            </p>
+        </section>
+
+        <!-- Primary CTA -->
+        <a href="checkin.html" class="cta-button" role="button">
+            Enter Temple Grounds
+        </a>
+
+        <!-- Feature Cards -->
+        <section class="features-section">
+            <!-- Privacy First -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        <path d="M12 12h.01"/>
+                    </svg>
+                </div>
+                <h2 class="feature-title">Privacy First</h2>
+                <p class="feature-description">
+                    No account required. No tracking. Your peace of mind matters.
+                </p>
+            </div>
+
+            <!-- Temporary Access -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <h2 class="feature-title">Temporary Access</h2>
+                <p class="feature-description">
+                    Your session expires automatically when you leave the premises.
+                </p>
+            </div>
+
+            <!-- Community Driven -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h2 class="feature-title">Community Driven</h2>
+                <p class="feature-description">
+                    Help others find their belongings. Good karma follows good deeds.
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="footer-text">Om Shanti Shanti Shanti</p>
+        </footer>
+    </div>
+</body>
+</html>
