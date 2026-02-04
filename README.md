@@ -61,15 +61,6 @@ npm run preview
 - ♿ Accessibility-friendly
 - ⚡ Performance optimized
 
-## 🏗️ Project Structure
-
-```
-src/
-├── components/      # Reusable UI components
-├── pages/          # Page components
-├── App.jsx         # Main app with routing
-├── main.jsx        # Entry point
-└── index.css       # Global styles
 ```
 
 ## 🎨 3D Background
